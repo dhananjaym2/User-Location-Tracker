@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +29,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +69,10 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private Button no_account_yet_sign_up;
+    private TextView no_account_yet_sign_up;
 
-//    private FirebaseAuth auth;
+    private FirebaseAuth mAuth;
+    private final String TAG = UserLoginTask.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +104,8 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
         mProgressView = findViewById(R.id.login_progress);
         no_account_yet_sign_up = findViewById(R.id.no_account_yet_sign_up);
         no_account_yet_sign_up.setOnClickListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
     }
 
     private void populateAutoComplete() {
@@ -139,6 +151,19 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null)
+            goToChildrenList(currentUser);
+    }
+
+    private void goToChildrenList(FirebaseUser currentUser) {
+        Intent intentToChildrenList = new Intent(this, ChildrenListActivity.class);
+        startActivity(intentToChildrenList);
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -193,12 +218,13 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        if (TextUtils.isEmpty(email))
+            return false;
+        else
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -285,13 +311,18 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.no_account_yet_sign_up:
-//                goToSignUpPage();
+                goToSignUpPage();
                 break;
 
             case R.id.email_sign_in_button:
                 attemptLogin();
                 break;
         }
+    }
+
+    private void goToSignUpPage() {
+        Intent intentToSignUpPage = new Intent(this, SignUpActivity.class);
+        startActivity(intentToSignUpPage);
     }
 
 
@@ -321,7 +352,34 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            mAuth.signInWithEmailAndPassword(mEmail, mPassword)
+
+                    .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                goToChildrenList(user);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Snackbar.make(mPasswordView, "Authentication failed.", Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    })
+
+                    .addOnFailureListener(
+                            new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "signInWithEmail:failure", e.getCause());
+                                    Snackbar.make(mPasswordView, "Authentication failed. " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+//                            Toast.makeText(SignInActivity.this, "Authentication failed. " + e.getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
             try {
                 // Simulate network access.

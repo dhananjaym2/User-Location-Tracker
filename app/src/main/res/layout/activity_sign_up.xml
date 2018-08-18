@@ -35,15 +35,15 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -79,22 +79,40 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <RadioGroup
+                android:id="@+id/radioGroupUserType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/parentRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parent" />
+
+                <RadioButton
+                    android:id="@+id/childRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/child" />
+            </RadioGroup>
+
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:text="@string/action_sign_up"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/no_account_yet_sign_up"
+                android:id="@+id/have_an_account_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:gravity="center_horizontal"
-                android:text="@string/no_account_yet_sign_up" />
+                android:text="@string/have_an_account_sign_in" />
 
         </LinearLayout>
     </ScrollView>

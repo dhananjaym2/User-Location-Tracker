@@ -10,7 +10,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -22,4 +22,10 @@
     <string name="child_name">Child name</string>
     <string name="action_add_new_child">Add new child</string>
     <string name="no_account_yet_sign_up">No account yet! Sign up</string>
+    <string name="signed_out">Signed out!</string>
+    <string name="child">Child</string>
+    <string name="parent">Parent</string>
+    <string name="title_activity_sign_up">Sign up</string>
+    <string name="have_an_account_sign_in">Have an account, sign in!</string>
+    <string name="action_sign_up">Sign up</string>
 </resources>
