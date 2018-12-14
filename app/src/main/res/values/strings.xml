@@ -28,4 +28,6 @@
     <string name="title_activity_sign_up">Sign up</string>
     <string name="have_an_account_sign_in">Have an account, sign in!</string>
     <string name="action_sign_up">Sign up</string>
+    <string name="please_select_your_user_type">Please select your user type.</string>
+    <string name="user_type">User type:</string>
 </resources>

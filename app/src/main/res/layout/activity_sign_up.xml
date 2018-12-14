@@ -79,10 +79,18 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/user_typeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/user_type" />
+
             <RadioGroup
                 android:id="@+id/radioGroupUserType"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/radioGroupMargin">
 
                 <RadioButton
                     android:id="@+id/parentRadioButton"
@@ -102,7 +110,7 @@
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/action_sign_up"
                 android:textStyle="bold" />
 
